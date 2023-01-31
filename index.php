@@ -11,7 +11,7 @@
             <div class="nav-links">
                 <ul>
                     <li><a href="#">Informations</a></li>
-                    <li><a href="content/public/calendrier.html">Calendrier</a></li>
+                    <li><a href="#">Calendrier</a></li>
                     <li><a href="#">Contacts</a></li>
                 </ul>
             </div>
@@ -29,7 +29,6 @@
                 </div>
             </section>
             <section class="col2">
-                <!-- Future call of the connexion.php function to verify the argument -->
                 <form action = "functions/connexion.php" method="POST"> 
                     <p>Bienvenue</p>
                     <input type="mail" placeholder="Adresse mail" name="uti_mail" required><br>

@@ -2,14 +2,17 @@
 <html lang="fr">
     <?php
     	session_start();
+        if(isset($_GET['idn'])){
+            $numero = $_GET['idn'];
+        }
 	?>
 	<head>
     	<meta charset="utf-8"/>
     	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/>
         <?php
-                if(isset($_SESSION['isDirector'])){
+                if(isset($_SESSION['isPresident'])){
                     echo '
-                        <title>Liste des concours en cours et à venir / Directeur</title>
+                        <title>Mes dessins</title>
                     ';
                 }else{
                     echo '<p>Erreur</p>';
@@ -18,11 +21,10 @@
 	</head>
 	<body>
         <nav class="navbar">
-            <a href="#" class="logo">Liste des concours en cours et à venir / Directeur</a>
+            <a href="#" class="logo">Mes Dessins</a>
             <div class="nav-links">
                 <ul>
                     <li><a href="./menu.php">Profil</a></li>
-                    <li><a href="./directeur_club.php">Mon club</a></li>
                 </ul>
             </div>
         </nav>
@@ -36,20 +38,18 @@
                     require_once('../../functions/mypdo.class.php');
                     $vpdo = new mypdo ();
                     $db = $vpdo->connexion;
-                    $result = $vpdo->listeConcoursDispo();
+                    $result = $vpdo->listeDessins($numero);
                     if($result && $row = $result->fetch ( PDO::FETCH_OBJ) ) {
                         echo '<tr>
-                        <th> Theme </th>
-                        <th> Descriptif </th>
+                        <th> Dessin </th>
+                        <th> Concours </th>
                         <th> Date de début </th>
                         <th> Date de fin </th>
-                        <th> Etat </th>
-                        <th> Nom du président </th>
-                        <th> Prénom du président </th>
-                        <th> Club </th>
+                        <th> Note </th>
+                        <th> Classement </th>
                         </tr>';
                         do {
-                            echo '<tr><td>'.$row->theme.'</td><td>'.$row->descriptif.'</td><td>'.$row->dateDebut.'</td><td>'.$row->dateFin.'</td><td>'.$row->etat.'</td><td>'.$row->nom.'</td><td>'.$row->prenom.'</td><td>'.$row->nomClub.'</td>';
+                            echo '<tr><td>'.$row->leDessin.'</td><td>'.$row->theme.'</td><td>'.$row->dateDebut.'</td><td>'.$row->dateFin.'</td><td>'.$row->note.'</td><td>'.$row->classement.'</td>';
                         } while($row = $result->fetch ( PDO::FETCH_OBJ));
                     }
                     else {
@@ -57,6 +57,7 @@
                     }
                 ?>
                 </tbody>
+                
                 </table>
 	</body>
 

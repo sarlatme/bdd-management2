@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php
-    	session_start(); //Ouverture de la session
+    	session_start();
 	?>
 	<head>
     	<meta charset="utf-8"/>
-    	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/> 	<!-- Reference fichier .css -->
+    	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/>
         <?php
                 if(isset($_SESSION['isPresident'])){
                     echo '
-                        <title>Concours attibué</title>
+                        <title>Concours attibués</title>
                     ';
                 }else{
                     echo '<p>Erreur</p>';
@@ -18,7 +18,7 @@
 	</head>
 	<body>
         <nav class="navbar">
-            <a href="#" class="logo">Concours attribué</a>
+            <a href="#" class="logo">Concours attribués</a>
             <div class="nav-links">
                 <ul>
                     <li><a href="./menu.php">Profil</a></li>
@@ -29,16 +29,15 @@
         </nav>
 
         <header></header>
-            <a href="#" class="switch">Dessin</a>
             <table>
                 <thead>
                 </thead>
                 <tbody>
                 <?php
                     require_once('../../functions/mypdo.class.php');
-                    $vpdo = new mypdo (); //initialise la classe
-                    $db = $vpdo->connexion; //ouvrir la connexion
-                    $result = $vpdo->listeConcours();
+                    $vpdo = new mypdo ();
+                    $db = $vpdo->connexion;
+                    $result = $vpdo->listeConcoursPreside();
                     if($result && $row = $result->fetch ( PDO::FETCH_OBJ) ) {
                         echo '<tr>
                         <th> Theme </th>
@@ -46,12 +45,9 @@
                         <th> Date de début </th>
                         <th> Date de fin </th>
                         <th> Etat </th>
-                        <th> Nom du président </th>
-                        <th> Prénom du président </th>
-                        <th> Club </th>
                         </tr>';
-                        do { //tant qu'une ligne de resultat est retourné on reste dans le while
-                            echo '<tr><td><a href="#" style="color: white; text-transform: uppercase;">'.$row->theme.'</a></td><td>'.$row->descriptif.'</td><td>'.$row->dateDebut.'</td><td>'.$row->dateFin.'</td><td>'.$row->etat.'</td><td>'.$row->nom.'</td><td>'.$row->prenom.'</td><td>'.$row->nomClub.'</td>';
+                        do {
+                            echo '<tr><td><a href="./president_concours-participants.php?idc='.$row->numConcours.'" class="switch">'.$row->theme.'</a></td><td>'.$row->descriptif.'</td><td>'.$row->dateDebut.'</td><td>'.$row->dateFin.'</td><td>'.$row->etat.'</td>';
                         } while($row = $result->fetch ( PDO::FETCH_OBJ));
                     }
                     else {

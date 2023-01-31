@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php
-    	session_start(); //Ouverture de la session
+    	session_start();
 	?>
 	<head>
     	<meta charset="utf-8"/>
-    	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/> 	<!-- Reference fichier .css -->
+    	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/>
         <?php
                 if(isset($_SESSION['isDirector'])){
                     echo '
@@ -36,8 +36,8 @@
                 <tbody>
                 <?php
                     require_once('../../functions/mypdo.class.php');
-                    $vpdo = new mypdo (); //initialise la classe
-                    $db = $vpdo->connexion; //ouvrir la connexion
+                    $vpdo = new mypdo ();
+                    $db = $vpdo->connexion;
                     $result = $vpdo->listeMembreClub();
                     if($result && $row = $result->fetch ( PDO::FETCH_OBJ) ) {
                         echo '<tr>
@@ -47,7 +47,7 @@
                         <th> Email </th>
                         <th> Date de License </th>
                         </tr>';
-                        do { //tant qu'une ligne de resultat est retourné on reste dans le while
+                        do {
                             echo '<tr><td>'.$row->nom.'</td><td>'.$row->prenom.'</td><td>'.$row->age.'</td><td>'.$row->email.'</td><td>'.$row->dateLicense.'</td>';
                         } while($row = $result->fetch ( PDO::FETCH_OBJ));
                     }

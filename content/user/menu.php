@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php
-    	session_start(); //Ouverture de la session
+    	session_start(); 
 
         require_once('../../functions/mypdo.class.php');
-        $vpdo = new mypdo (); //initialise la classe
-        $db = $vpdo->connexion; //ouvrir la connexion
+        $vpdo = new mypdo ();
+        $db = $vpdo->connexion;
         $result = $vpdo->getNomClub();
         $row = $result->fetch(PDO::FETCH_OBJ);
         $_SESSION['nomClub'] = $row->nomClub;
+
+        require_once('../../functions/mypdo.class.php');
+        $vpdo = new mypdo ();
+        $db = $vpdo->connexion;
+        $result = $vpdo->getMoyennes();
+        $row = $result->fetch(PDO::FETCH_OBJ);
+        $_SESSION['moyenneNote'] = $row->moyNote;
+        $_SESSION['moyenneClassement'] = $row->moyClassement;
 	?>
 	<head>
     	<meta charset="utf-8"/>
-    	<link rel="stylesheet" type="text/css" href="../../style/style.css"/> 	<!-- Reference fichier .css -->
+    	<link rel="stylesheet" type="text/css" href="../../style/style.css"/>
         <?php
                 if(isset($_SESSION['connect'])){
                     echo '
@@ -31,9 +39,15 @@
                     <a href="#" class="logo">Profil de '.$_SESSION['prenom'].' / Administrateur</a>
                     ';
                 } elseif(isset($_SESSION['isDirector'])) {
-                    echo '
-                    <a href="#" class="logo">Profil de '.$_SESSION['prenom'].' / Directeur</a>
-                    ';                     
+                    if(isset($_SESSION['isPresident'])){
+                        echo '
+                        <a href="#" class="logo">Profil de '.$_SESSION['prenom'].' / Directeur & Président</a>
+                        ';                        
+                    } else {
+                        echo '
+                        <a href="#" class="logo">Profil de '.$_SESSION['prenom'].' / Directeur</a>
+                        ';
+                    }                  
                 } else {
                     echo '
                     <a href="#" class="logo">Profil de '.$_SESSION['prenom'].'</a>
@@ -103,6 +117,8 @@
                                     <p>Adresse : '.$_SESSION['adresse'].'</p><br>
                                     <p>Date de license : '.$_SESSION['dateLicense'].'</p><br>
                                     <p>Club : '.$_SESSION['nomClub'].'</p><br>
+                                    <p>Moyenne des notes : '.$_SESSION['moyenneNote'].'</p><br>
+                                    <p>Moyenne des classements : '.$_SESSION['moyenneClassement'].'</p><br>
                                 ';
                             }else{
                                 echo '<p>Erreur</p>';
@@ -112,7 +128,7 @@
                     </section>
         </section>
         <footer>
-            <p>Copyright &copy; Bury Hugo & Sarlat Meven</p>
+            <p>Copyright &copy; Bury Hugo, Axel Lory & Sarlat Meven</p>
             <p>2020 - 2022 | All Right Reserved.</p>
         </footer>
 	</body>

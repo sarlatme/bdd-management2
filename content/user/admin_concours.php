@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php
-    	session_start(); //Ouverture de la session
+    	session_start();
 	?>
 	<head>
     	<meta charset="utf-8"/>
-    	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/> 	<!-- Reference fichier .css -->
+    	<link rel="stylesheet" type="text/css" href="../../style/style-list.css"/>
         <?php
                 if(isset($_SESSION['isAdmin'])){
                     echo '
@@ -34,8 +34,8 @@
                 <tbody>
                 <?php
                     require_once('../../functions/mypdo.class.php');
-                    $vpdo = new mypdo (); //initialise la classe
-                    $db = $vpdo->connexion; //ouvrir la connexion
+                    $vpdo = new mypdo ();
+                    $db = $vpdo->connexion;
                     $result = $vpdo->listeConcours();
                     if($result && $row = $result->fetch ( PDO::FETCH_OBJ) ) {
                         echo '<tr>
@@ -48,7 +48,7 @@
                         <th> Prénom du président </th>
                         <th> Club </th>
                         </tr>';
-                        do { //tant qu'une ligne de resultat est retourné on reste dans le while
+                        do {
                             echo '<tr><td><a href="#" style="color: white; text-transform: uppercase;">'.$row->theme.'</a></td><td>'.$row->descriptif.'</td><td>'.$row->dateDebut.'</td><td>'.$row->dateFin.'</td><td>'.$row->etat.'</td><td>'.$row->nom.'</td><td>'.$row->prenom.'</td><td>'.$row->nomClub.'</td>';
                         } while($row = $result->fetch ( PDO::FETCH_OBJ));
                     }

@@ -3,74 +3,42 @@
 	<head>
 	</head>	
 	<?php
-    echo "connexion";
-    	session_start();  // Demarrage ou restauration de la session
+    	session_start();
 	?>
 	<body>
 		    <?php
-		        $serveur = "localhost"; //identifiant server
-		        $dbname = "siteweb"; //nom de la bdd
-		        $user = "user"; //nom du compte bdd
-		        $pass = "userpass"; // mot de passe du compte bdd
+		        $serveur = "localhost";
+		        $dbname = "siteweb";
+		        $user = "user";
+		        $pass = "userpass";
 
 				$_SESSION['connect']= null;
 
-		        // if (!isset($_SESSION['connect'])){ //permet de savoir s'il y a deja une session ouverte
-		        //     $uti_mail = securisation_bdd($_POST["uti_mail"]);
-		        //     $uti_mdp = securisation_bdd($_POST["uti_mdp"]); 
-		        // }
-		        // else {
-		        //     $uti_mail = securisation_bdd($_SESSION['id']);
-		        //     $uti_mdp = securisation_bdd($_SESSION['pass']); 
-		        // }
-
-                $uti_mail = securisation_bdd($_POST["uti_mail"]);
-                $uti_mdp = securisation_bdd($_POST["uti_mdp"]);
-
-				function securisation_bdd($donnees){ //fonction qui empeche l'injection SQL
+				function securisation_bdd($donnees){
 					$donnees = trim($donnees);
 					$donnees = stripslashes($donnees);
 					$donnees = htmlspecialchars($donnees);
 					return $donnees;
 				}
+
+                $uti_mail = securisation_bdd($_POST["uti_mail"]);
+                $uti_mdp = securisation_bdd($_POST["uti_mdp"]);
+
 				try {
 					$bdd = new PDO("mysql:host=$serveur;dbname=$dbname",$user,$pass);
 				} catch (PDOException $e) {
 					print "Erreur !:" . $e->getMessage() . "<br/>";
 					die();
 				}
-				// $bdd = new PDO("mysql:host=$serveur;dbname=$dbname",$user,$pass);
+
 				$qUser = "SELECT numUtilisateur, prenom, nom, email, motDePasse, adresse, numClub, dateLicense  FROM Utilisateur WHERE email = :uti_mail";
 	            $req = $bdd->prepare($qUser);
-
-	            $req-> execute(array(":uti_mail" => $uti_mail)); //verification de l'identifiant
+	            $req-> execute(array(":uti_mail" => $uti_mail));
 	            $resultat = $req->fetch();
 
 
-	            // $verification = password_verify( $uti_mdp, $resultat["uti_mdp"]); //verification du mot de passe associ� a l'identifiant
-
-
-	            // if ($verification) //si les identifiants sont corrects
-	            // {
-				// 	// Ecriture d'une nouvelle valeur dans le tableau de session
-				// 	$_SESSION['id'] = $uti_mail;
-				// 	$_SESSION['pass'] = $uti_mdp;
-				// 	$_SESSION['num'] = $resultat['uti_num'];
-				// 	$_SESSION['prenom'] = $resultat['uti_prenom'];
-				// 	$_SESSION['connect']= 'true';
-				// 	$req->closeCursor();
-				// 	header('Location: ../index.php');
- 				// 	exit();
-	            // }
-	            // else
-	            // {
-	            // 	header('Location: ../include/connexion_lost.php'); //renvoie a la page d'erreur de login
-	            // 	$req->closeCursor();
-	            // }
-
                 $_SESSION['mail'] = $uti_mail;
                 $_SESSION['pass'] = $uti_mdp;
-    
                 $_SESSION['num'] = $resultat['numUtilisateur'];
                 $_SESSION['prenom'] = $resultat['prenom'];
                 $_SESSION['nom'] = $resultat['nom'];
@@ -114,7 +82,6 @@
 				} else {
 					$_SESSION['isPresident'] = null;
 				}
-				
 
                 $req->closeCursor();
                 header('Location: ../content/user/menu.php');

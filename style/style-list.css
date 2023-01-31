@@ -78,12 +78,19 @@ table {
     opacity: .7;
   }
 
-  a {
+  .switch {
     color: white;
     text-transform: uppercase;
     font-weight: bold;
+    background: linear-gradient(to top, rgba(255, 0, 0, 0.7) 0%, rgba(255, 0, 0, 0.7) 10%, transparent 10.01%) no-repeat left bottom / 0 100%;
+    transition: background-size .5s;
+  }
+
+  .switch:hover {
+    background-size: 100% 100%;
   }
 
   .switch {
-    padding-left: 10%;
+    margin-left: 10%;
   }
+
