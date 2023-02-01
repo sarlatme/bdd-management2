@@ -40,7 +40,6 @@
 				if(!$resultat){
 					echo "Utilisateur introuvable";
 				}else{
-				echo "allo";
 					if($uti_mdp == $resultat['motDePasse']){
 						$_SESSION['mail'] = $uti_mail;
 						$_SESSION['pass'] = $uti_mdp;

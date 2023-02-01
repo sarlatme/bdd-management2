@@ -56,7 +56,8 @@ class mypdo extends PDO{
 
     public function listeMembreClub() {
       $myClub = $_SESSION['numClub'];
-      $requete = 'SELECT nom,prenom,age,email,dateLicense from Utilisateur u1,Club c1 WHERE u1.numClub = c1.numClub and c1.numClub = '.$myClub.';';
+      $requete = 'SELECT nom,prenom,age,email,dateLicense from Utilisateur u1,Club c1 
+      WHERE u1.numClub = c1.numClub and c1.numClub = '.$myClub.';';
       $result = $this->connexion->query($requete);
       if($result){
         return $result;
@@ -134,9 +135,9 @@ class mypdo extends PDO{
       $num = $argument;
       $requete = 'SELECT nom,prenom,nomClub from Concours c1,ParticipeCompetiteur p1,Utilisateur ut1, Club cl1
       WHERE c1.numConcours = p1.numConcours
+          and p1.numCompetiteur = ut1.numUtilisateur
           and c1.numConcours = '.$num.'
-          and ut1.numClub = cl1.numClub
-            GROUP by ut1.numUtilisateur;';
+          and ut1.numClub = cl1.numClub';
       $result = $this->connexion->query($requete);
       if($result){
         return $result;
@@ -148,12 +149,14 @@ class mypdo extends PDO{
     public function listeDessinConcours($argument) {
       $num = $argument;
       $requete = 'SELECT  nom,prenom,d1.commentaire,leDessin,classement,note from ParticipeCompetiteur cmp1, Utilisateur u1, Concours c1,Dessin d1, Evaluation e1
-      WHERE c1.numConcours = d1.numConcours
-          and c1.numConcours = '.$num.'
-          and d1.numDessin = e1.numDessin
-          and u1.numUtilisateur = cmp1.numCompetiteur
-          and cmp1.numConcours = c1.numConcours
-			ORDER BY `e1`.`note`  DESC;';
+      WHERE cmp1.numConcours = c1.numConcours
+      and cmp1.numCompetiteur = u1.numUtilisateur
+      and d1.numCompetiteur = u1.numUtilisateur
+      and e1.numDessin = d1.numDessin
+      and c1.numConcours = d1.numConcours
+           and c1.numConcours = '.$num.'  
+           GROUP by d1.numDessin
+            ORDER BY e1.`note` DESC;';
       $result = $this->connexion->query($requete);
       if($result){
         return $result;
