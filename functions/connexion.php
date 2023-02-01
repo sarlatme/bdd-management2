@@ -37,55 +37,70 @@
 	            $resultat = $req->fetch();
 
 
-                $_SESSION['mail'] = $uti_mail;
-                $_SESSION['pass'] = $uti_mdp;
-                $_SESSION['num'] = $resultat['numUtilisateur'];
-                $_SESSION['prenom'] = $resultat['prenom'];
-                $_SESSION['nom'] = $resultat['nom'];
-                $_SESSION['adresse'] = $resultat['adresse'];
-                $_SESSION['numClub'] = $resultat['numClub'];
-                $_SESSION['dateLicense'] = $resultat['dateLicense'];
-                $_SESSION['connect']= 'true';
+				if(!$resultat){
+					echo "Utilisateur introuvable";
+				}else{
+				echo "allo";
+					if($uti_mdp == $resultat['motDePasse']){
+						$_SESSION['mail'] = $uti_mail;
+						$_SESSION['pass'] = $uti_mdp;
+						$_SESSION['num'] = $resultat['numUtilisateur'];
+						$_SESSION['prenom'] = $resultat['prenom'];
+						$_SESSION['nom'] = $resultat['nom'];
+						$_SESSION['adresse'] = $resultat['adresse'];
+						$_SESSION['numClub'] = $resultat['numClub'];
+						$_SESSION['dateLicense'] = $resultat['dateLicense'];
+						$_SESSION['connect']= 'true';
+
+						$num_Utilisateur = $resultat['numUtilisateur'];
+						$qAdmin = "SELECT * FROM Administrateur WHERE numAdministrateur = :num_Utilisateur";
+						$isAdmin = $bdd->prepare($qAdmin);
+						$isAdmin-> execute(array(":num_Utilisateur" => $num_Utilisateur));
+						$resAdmin = $isAdmin->fetch();
+		
+						if ($isAdmin->rowCount() > 0) {
+							$_SESSION['isAdmin'] = true;
+						} else {
+							$_SESSION['isAdmin'] = null;
+						}
+		
+						$num_Utilisateur = $resultat['numUtilisateur'];
+						$qDirector = "SELECT * FROM Directeur WHERE numDirecteur = :num_Utilisateur";
+						$isDirector = $bdd->prepare($qDirector);
+						$isDirector-> execute(array(":num_Utilisateur" => $num_Utilisateur));
+						$resDirector = $isDirector->fetch();
+		
+						if ($isDirector->rowCount() > 0) {
+							$_SESSION['isDirector'] = true;
+						} else {
+							$_SESSION['isDirector'] = null;
+						}
+		
+						$num_Utilisateur = $resultat['numUtilisateur'];
+						$qPresident = "SELECT * FROM President WHERE numPresident = :num_Utilisateur";
+						$isPresident = $bdd->prepare($qPresident);
+						$isPresident-> execute(array(":num_Utilisateur" => $num_Utilisateur));
+						$isPresident = $isPresident->fetch();
+		
+						if ($isDirector->rowCount() > 0) {
+							$_SESSION['isPresident'] = true;
+						} else {
+							$_SESSION['isPresident'] = null;
+						}
+						$req->closeCursor();
+						header('Location: ../content/user/menu.php');
+						exit();
+					}else{
+						header('Location: ../index.php');
+						$req->closeCursor();
+					}
+				}
+
+
 				
-				$num_Utilisateur = $resultat['numUtilisateur'];
-				$qAdmin = "SELECT * FROM Administrateur WHERE numAdministrateur = :num_Utilisateur";
-				$isAdmin = $bdd->prepare($qAdmin);
-				$isAdmin-> execute(array(":num_Utilisateur" => $num_Utilisateur));
-				$resAdmin = $isAdmin->fetch();
 
-				if ($isAdmin->rowCount() > 0) {
-					$_SESSION['isAdmin'] = true;
-				} else {
-					$_SESSION['isAdmin'] = null;
-				}
 
-				$num_Utilisateur = $resultat['numUtilisateur'];
-				$qDirector = "SELECT * FROM Directeur WHERE numDirecteur = :num_Utilisateur";
-				$isDirector = $bdd->prepare($qDirector);
-				$isDirector-> execute(array(":num_Utilisateur" => $num_Utilisateur));
-				$resDirector = $isDirector->fetch();
 
-				if ($isDirector->rowCount() > 0) {
-					$_SESSION['isDirector'] = true;
-				} else {
-					$_SESSION['isDirector'] = null;
-				}
-
-				$num_Utilisateur = $resultat['numUtilisateur'];
-				$qPresident = "SELECT * FROM President WHERE numPresident = :num_Utilisateur";
-				$isPresident = $bdd->prepare($qPresident);
-				$isPresident-> execute(array(":num_Utilisateur" => $num_Utilisateur));
-				$isPresident = $isPresident->fetch();
-
-				if ($isDirector->rowCount() > 0) {
-					$_SESSION['isPresident'] = true;
-				} else {
-					$_SESSION['isPresident'] = null;
-				}
-
-                $req->closeCursor();
-                header('Location: ../content/user/menu.php');
-                exit();
     
    			?>
 	</body>
